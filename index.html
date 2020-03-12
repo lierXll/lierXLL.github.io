@@ -260,6 +260,166 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/thirdBlog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lierXll">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢迎来到尔尔的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/12/thirdBlog/" itemprop="url">从springIOC容器获取对象的步骤</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-12T21:21:06+08:00">
+                2020-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="一、将对象放入IOC容器"><a href="#一、将对象放入IOC容器" class="headerlink" title="一、将对象放入IOC容器"></a>一、将对象放入IOC容器</h4><p>控制反转(IOC)/依赖注入(DI)的三种方法<br>底层通过反射实现</p>
+<h5 id="1-set方法注入"><a href="#1-set方法注入" class="headerlink" title="1.set方法注入"></a>1.set方法注入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id&#x3D;&quot;ccc&quot; class&#x3D;&quot;全类名&quot;&gt;</span><br><span class="line">	&lt;property name&#x3D;&quot;xxx&quot; value&#x3D;&quot;&quot;&gt;&lt;&#x2F;property&gt;&lt;!--基本类型--&gt;</span><br><span class="line">	&lt;property name&#x3D;&quot;yyy&quot; ref&#x3D;&quot;引用对象bean的id&quot;&gt;&lt;&#x2F;property&gt;&lt;!--引用类型--&gt;</span><br><span class="line">&lt;&#x2F;bean&gt;</span><br></pre></td></tr></table></figure>
+<p>通过xxx找到setXxx()方法赋值</p>
+<h5 id="2-构造器注入"><a href="#2-构造器注入" class="headerlink" title="2.构造器注入"></a>2.构造器注入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id&#x3D;&quot;ccc&quot; class&#x3D;&quot;全类名&quot;&gt;</span><br><span class="line">	&lt;constructor-arg value&#x3D;&quot;xxx&quot;&gt;&lt;&#x2F;constructor-arg&gt;</span><br><span class="line">	&lt;constructor-arg ref&#x3D;&quot;引用对象bean的id&quot; &gt;&lt;&#x2F;constructor-arg&gt;</span><br><span class="line">&lt;&#x2F;bean&gt;</span><br></pre></td></tr></table></figure>
+<p>如果<constructor-arg ></constructor-arg>的顺序与构造方法参数顺序不一致<br>可以通过 index(索引位置) name(参数名称)type(参数类型)指定</p>
+<h5 id="3-p命名空间注入"><a href="#3-p命名空间注入" class="headerlink" title="3.p命名空间注入"></a>3.p命名空间注入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id&#x3D;&quot;course&quot; class&#x3D;&quot;cn.edu.entity.Course&quot; p:courseHour&#x3D;&quot;27&quot; p:courseName&#x3D;&quot;spring&quot; p:teacher-ref&#x3D;&quot;teacher&quot;&gt;</span><br><span class="line">&lt;&#x2F;bean&gt;</span><br></pre></td></tr></table></figure>
+<p>可以发现是调用set方法赋值的</p>
+<h4 id="二、从IOC容器获取对象"><a href="#二、从IOC容器获取对象" class="headerlink" title="二、从IOC容器获取对象"></a>二、从IOC容器获取对象</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext context &#x3D; new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);</span><br><span class="line">Ccc ccc &#x3D; (Ccc)context(&quot;Ccc对象bean的id值&quot;);</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/11/secondBlog/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -316,6 +476,17 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
                     <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
                   </a>
                 </span>
 
@@ -501,7 +672,8 @@
           
             <h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo:"></a>安装Hexo:</h3><h4 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1.安装node.js</h4><p>检查node是否安装成功: node -v<br>检查npm是否安装成功: npm -v</p>
 <h4 id="2-安装git"><a href="#2-安装git" class="headerlink" title="2.安装git"></a>2.安装git</h4><p>检查是否git安装成功: git –version</p>
-<h4 id="3-使用npm安装Hexo"><a href="#3-使用npm安装Hexo" class="headerlink" title="3.使用npm安装Hexo"></a>3.使用npm安装Hexo</h4><p>安装命令: npm install -g hexo-cli<br>检查npm是否安装成功: hexo -v<br>初始化: hexo init<br>安装生成器: npm install<br>安装hexo git插件: npm install hexo-deployer-git –save<br>新建一篇博客,目录为D:\BLOG\source_posts: hexo new “文件名称”<br>生成网页: hexo g<br>部署到本地，localhost:4000访问:  hexo s<br>清理缓存: hexo clean<br>部署到: github: hexo d<br>创建(首页)文件夹,目录为D:\BLOG\source\home，并生成index.md: hexo new ‘home’<br>####4.注意！！！<br>删去D:\BLOG\themes\next_config.yml文件menu标签/后的空格<br>否则网址后出现/20%/，跳转后404(menu其他标签同此)<br>tags: /tags/ || tags—————–&gt;tags: /tags/|| tags</p>
+<h4 id="3-使用npm安装Hexo"><a href="#3-使用npm安装Hexo" class="headerlink" title="3.使用npm安装Hexo"></a>3.使用npm安装Hexo</h4><p>安装命令: npm install -g hexo-cli<br>检查npm是否安装成功: hexo -v<br>初始化: hexo init<br>安装生成器: npm install<br>安装hexo git插件: npm install hexo-deployer-git –save<br>新建一篇博客,目录为D:\BLOG\source_posts: hexo new “文件名称”<br>生成网页: hexo g<br>部署到本地，localhost:4000访问:  hexo s<br>清理缓存: hexo clean<br>部署到: github: hexo d<br>创建(首页)文件夹,目录为D:\BLOG\source\home，并生成index.md: hexo new ‘home’</p>
+<h4 id="4-注意！！！"><a href="#4-注意！！！" class="headerlink" title="4.注意！！！"></a>4.注意！！！</h4><p>删去D:\BLOG\themes\next_config.yml文件menu标签/后的空格<br>否则网址后出现/20%/，跳转后404(menu其他标签同此)<br>tags: /tags/ || tags—————–&gt;tags: /tags/|| tags</p>
 
           
         
@@ -715,7 +887,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -726,7 +898,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
